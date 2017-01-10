@@ -11,9 +11,9 @@ defmodule H2Client do
         IO.puts "res = #{inspect res}"
         receive do
           {:end_stream, %Kadabra.Stream{} = stream} ->
-          IO.inspect stream
+          {:ok, stream}
         after 5_000 ->
-          IO.puts "Connection timed out."
+          {:error, :timeout}
         end
     end
 
