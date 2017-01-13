@@ -6,12 +6,10 @@ defmodule H2Client do
     end
 
     def request(pid, headers, body) do
-        IO.puts "pid = #{inspect pid}"
-        res =  Kadabra.request(pid, headers, body)
-        IO.puts "res = #{inspect res}"
+        Kadabra.request(pid, headers, body)
         receive do
           {:end_stream, %Kadabra.Stream{} = stream} ->
-          {:ok, stream}
+            {:ok, stream}
         after 5_000 ->
           {:error, :timeout}
         end
