@@ -23,7 +23,7 @@ defmodule ApnsHandler do
         reply_error(code, error, req, state)
     end
 
-    def prepare_reply(body, %{"apns-id" => apns_id} = headers, token, req, state) do
+    def prepare_reply(_body, %{"apns-id" => apns_id} = _headers, _token, req, state) do
         req = :cowboy_req.reply 200, %{"content-type" => "application/json", "apns-id" => apns_id}, "", req
         {:ok, req, state}
     end
@@ -69,7 +69,7 @@ defmodule ApnsHandler do
             "InternalServerError" = error -> {500, error}
             "ServiceUnavailable" = error -> {503, error}
             "Shutdown" = error -> {503, error}
-            _ = error -> {400, "PayloadEmpty"}
+            _  -> {400, "PayloadEmpty"}
         end
     end
 end
