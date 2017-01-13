@@ -3,6 +3,7 @@ defmodule ApnsHandler do
 
     def init(%{method: "POST", headers: headers} = req, state) do
         token  = :cowboy_req.binding(:token, req)
+        MockPushServer.latency
         Logger.info "method=POST;headers=#{inspect(headers)};token=#{token}"
         {:ok, body, req} = :cowboy_req.read_body(req)
         Logger.debug "body=#{inspect body}"
