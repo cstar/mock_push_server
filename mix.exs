@@ -29,7 +29,8 @@ defmodule MockPushServer.Mixfile do
      {:cowboy, github: "ninenines/cowboy", tag: "2.0.0-pre.4"},
      {:poison, "~> 2.0 or ~> 3.0"},
      {:kadabra,  github: "cstar/kadabra", override: true},
-     {:exsync, "~> 0.1", only: :dev}
+     {:exsync, "~> 0.1", only: :dev},
+     {:uuid, "~> 1.1"}
     ]
   end
 end

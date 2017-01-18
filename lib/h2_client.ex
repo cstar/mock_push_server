@@ -6,7 +6,9 @@ defmodule H2Client do
     end
 
     def request(pid, headers, body) do
-        Kadabra.request(pid, headers, body)
+        IO.puts "pid = #{inspect pid}"
+        res =  Kadabra.request(pid, headers, body)
+        IO.puts "res = #{inspect res}"
         receive do
           {:end_stream, %Kadabra.Stream{} = stream} ->
             {:ok, stream}
@@ -24,22 +26,32 @@ defmodule H2Client do
         init('localhost', :https, verify: :verify_none, port: 8443)
     end
 
-    def local(pid) do
+    def apns_local(pid) do
         headers =  [
           {":method", "POST"},
-          {"apns-id", "toto"},
-          {":path", "/3/device/toto"},
+          {"apns-id", "my-app"},
+          {":path", "/3/device/token"},
         ]
-        request(pid, headers, "toto")
+        request(pid, headers, ~s'{"aps" : { "alert" : "Message received from Bob" }}')
     end
 
-    def local_error(pid, message) do
+    def apns_local_error(pid, message) do
         headers =  [
           {":method", "POST"},
-          {"apns-id", "toto"},
-          {":path", "/3/device/CustomError=#{message}"},
+          {"apns-id", "my-app"},
+          {":path", "/3/device/error:#{message}"},
         ]
-        request(pid, headers, "toto")
+        request(pid, headers, ~s'{"aps": {"alert" : "Message received from Bob"}}')
+    end
+
+    def fcm_local(pid) do
+      headers = [
+        {":method", "POST"},
+        {":path", "/fcm/send"},
+        {"authorization", "key=thiskey" },
+        {"content-type", "application/json" }
+      ]
+      request(pid, headers, ~s'{"to": "thisregid", "data": {"x": 12}}' )
     end
 
     def golang do
@@ -47,7 +59,6 @@ defmodule H2Client do
           {":method", "PUT"},
           {":path", "/ECHO"},
         ]
-        request('http2.golang.org', :https, headers, "toto")
+        request('http2.golang.org', :https, headers, "this should be all caps")
     end
-
 end

@@ -3,7 +3,7 @@ defmodule ApnsHandler do
 
     def init(%{method: "POST", headers: headers} = req, state) do
         token  = :cowboy_req.binding(:token, req)
-        MockPushServer.latency
+        MockPushServer.latency "apns"
         Logger.info "method=POST;headers=#{inspect(headers)};token=#{token}"
         {:ok, body, req} = :cowboy_req.read_body(req)
         Logger.debug "body=#{inspect body}"
@@ -18,7 +18,7 @@ defmodule ApnsHandler do
         reply_error(400, "MissingDeviceToken", req, state) 
     end
 
-    def prepare_reply(_body, _headers, "CustomError=" <> error, req, state) do
+    def prepare_reply(_body, _headers, "error:" <> error, req, state) do
         {code, error} = get_code(error)
         reply_error(code, error, req, state)
     end

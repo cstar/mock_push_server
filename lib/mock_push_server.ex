@@ -9,7 +9,8 @@ defmodule MockPushServer do
     import Supervisor.Spec, warn: false
     start_env Mix.env
     :ets.new(:latency, [:named_table, :set, :public,  read_concurrency: true])
-    latency 0
+    latency "fcm", 0
+    latency "apns", 0
     start_cowboy
   end
 
@@ -22,7 +23,7 @@ defmodule MockPushServer do
        dispatch = :cowboy_router.compile([
           {:_,
            [ {"/3/device/:token", ApnsHandler, []},
-             {"/fcm/send", GcmHandler, []},
+             {"/fcm/send", FcmHandler, []},
              {"/latency", LatencyHandler, []}
            ]}
         ])
@@ -40,15 +41,15 @@ defmodule MockPushServer do
      certfile: Application.get_env(:mock_push_server, :certfile) || "priv/cert.pem"]
   end
 
-  def latency ms do
-    :ets.insert(:latency, {:latency, ms})
-    Logger.info "Latency set to #{ms} ms"
+  def latency service, ms do
+    :ets.insert(:latency, {service, ms})
+    Logger.info "#{service}: Latency set to #{ms} ms"
     ms
   end
 
-  def latency do
-    [{:latency, ms}] = :ets.lookup :latency, :latency
-    Logger.debug "Waiting for #{ms} ms"
+  def latency service do
+    [{service, ms}] = :ets.lookup :latency, service
+    Logger.debug "#{service}: Waiting for #{ms} ms"
     :timer.sleep ms
   end
 

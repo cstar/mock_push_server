@@ -1,0 +1,6 @@
+{ "data": {
+    "score": "5x1",
+    "time": "15:10"
+  },
+  "registration_ids" : ["error:NotRegistered", "error:DeviceMessageRate", "this-is-sc"]
+}
