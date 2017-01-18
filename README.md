@@ -31,11 +31,11 @@ error:TopicsMessageRateExceeded
 ```bash
 
 curl -i -k -XPOST -H "Content-Type: application/json" -H "Authorization: key=AIzaSyZ-1u" -d @../mock_push_server/priv/sample-multiple.json https://localhost:8443/fcm/send
-#HTTP/1.1 200 OK
-#content-length: 255
-#content-type: application/json
-#date: Wed, 18 Jan 2017 10:10:26 GMT
-#server: Cowboy
+# HTTP/1.1 200 OK
+# content-length: 255
+# content-type: application/json
+# date: Wed, 18 Jan 2017 10:10:26 GMT
+# server: Cowboy
 #
 # {"success":2,"results":[{"message_id":"2c6ccfe0-9064-49eb-acff-55e98751001b"},{"registration_id":":registration_id2","message_id":"2c6ccfe0-9064-49eb-acff-55e98751001b"}],"multicast_id":"3148d4fb-4309-45ca-9eb2-20a819738d87","failure":0,"canonical_ids":1}
 
@@ -43,16 +43,16 @@ curl -i -k -XPOST -H "Content-Type: application/json" -H "Authorization: key=AIz
 
 #### some failures
 
-```
+```bash
 curl -i -k -XPOST -H "Content-Type: application/json" -H "Authorization: key=AIzaSyZ-1u" -d @../mock_push_server/priv/sample-failures.json
 
-#HTTP/1.1 200 OK
-#content-length: 219
-#content-type: application/json
-#date: Wed, 18 Jan 2017 11:15:00 GMT
-#server: Cowboy
+# HTTP/1.1 200 OK
+# content-length: 219
+# content-type: application/json
+# date: Wed, 18 Jan 2017 11:15:00 GMT
+# server: Cowboy
 #
-#{"success":1,"results":[{"error":"NotRegistered"},{"error":"DeviceMessageRate"},{"message_id":"d9db8abb-3b1a-4e29-a750-55901d0534f4"}],"multicast_id":"6964845d-8131-4694-b572-d10b682cd682","failure":2,"canonical_ids":0
+# {"success":1,"results":[{"error":"NotRegistered"},{"error":"DeviceMessageRate"},{"message_id":"d9db8abb-3b1a-4e29-a750-55901d0534f4"}],"multicast_id":"6964845d-8131-4694-b572-d10b682cd682","failure":2,"canonical_ids":0
 ```
 
 ## APNS
